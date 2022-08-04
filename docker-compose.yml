@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  # consultarciu:
+  #   image: consultarciu
+  #   build:
+  #     context: .
+  #     dockerfile: ./consultar-ciu/Dockerfile
+  #   ports:
+  #     - 8081:8081
+
+  gestionarusuarios:
+    image: gestionarusuarios
+    build:
+      context: .
+      dockerfile: ./gestionar-usuarios/Dockerfile
+    ports:
+      - 8082:8082
+
+  loginkeycloak:
+    image: loginkeycloak
+    build:
+      context: .
+      dockerfile: ./login-keycloak/Dockerfile
+    ports:
+      - 8084:8084
+
+  gestionarusuariosmunicipales:
+    image: gestionarusuariosmunicipales
+    build:
+      context: .
+      dockerfile: ./gestionar-usuarios-municipales/Dockerfile
+    ports:
+      - 8085:8085
