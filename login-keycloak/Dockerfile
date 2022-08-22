@@ -14,7 +14,7 @@
 # Maven 
 FROM maven:3.8.1-openjdk-11-slim AS builder
 
-WORKDIR /app
+WORKDIR /app/ogin-keycloak
 
 COPY login-keycloak/pom.xml .
 
@@ -33,7 +33,7 @@ WORKDIR /app
 ENV TZ=America/Guayaquil
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY --from=builder /app/target/login-keycloak-1.0.jar .
+COPY --from=builder /app/login-keycloak/target/login-keycloak-1.0.jar .
 
 EXPOSE 8084
 
