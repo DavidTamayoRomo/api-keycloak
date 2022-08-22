@@ -19,7 +19,7 @@ COPY gestionar-usuarios-municipales/pom.xml .
 
 RUN mvn -e -B dependency:resolve
 
-COPY src ./src
+COPY gestionar-usuarios-municipales/src ./src
 
 RUN mvn clean -e -B package
 

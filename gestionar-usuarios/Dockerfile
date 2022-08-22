@@ -20,7 +20,7 @@ COPY gestionar-usuarios/pom.xml .
 
 RUN mvn -e -B dependency:resolve
 
-COPY src ./src
+COPY gestionar-usuarios/src ./src
 
 RUN mvn clean -e -B package
 
