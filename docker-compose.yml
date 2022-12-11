@@ -16,6 +16,7 @@ services:
       dockerfile: ./gestionar-usuarios/Dockerfile
     ports:
       - 8082:8082
+    restart: always
 
   loginkeycloak:
     image: loginkeycloak
@@ -24,6 +25,7 @@ services:
       dockerfile: ./login-keycloak/Dockerfile
     ports:
       - 8084:8084
+    restart: always
 
   gestionarusuariosmunicipales:
     image: gestionarusuariosmunicipales
@@ -32,3 +34,4 @@ services:
       dockerfile: ./gestionar-usuarios-municipales/Dockerfile
     ports:
       - 8085:8085
+    restart: always
