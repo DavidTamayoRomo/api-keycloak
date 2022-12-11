@@ -17,6 +17,10 @@ RUN mvn clean -e -B package
 # RTSDK Java
 FROM openjdk:11
 
+COPY ./certs/tls.crt /etc/ssl/certs/
+
+RUN keytool -import -alias certificado-keycloack -keystore $JAVA_HOME/lib/security/cacerts -file /etc/ssl/certs/tls.crt -noprompt -trustcacerts -storepass changeit
+
 WORKDIR /app
 
 ENV TZ=America/Guayaquil
