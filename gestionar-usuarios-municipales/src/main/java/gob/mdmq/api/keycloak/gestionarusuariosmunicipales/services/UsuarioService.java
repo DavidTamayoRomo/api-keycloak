@@ -352,4 +352,30 @@ public class UsuarioService {
         }
     }
 
+    public Mono<Object[]> consultarUsuarioPorCorreo(String email) {
+        try {
+            String url = prop.getResourceServerURLUsers() + "/users?email=" + email;
+
+            Mono<Object[]> retrievedResource = webClient.get()
+                    .uri(url)
+                    .attributes(
+                            ServerOAuth2AuthorizedClientExchangeFilterFunction
+                                    .clientRegistrationId("municipalesRealm"))
+                    .exchangeToMono(response -> {
+                        if (response.statusCode()
+                                .equals(HttpStatus.OK)) {
+                            return response.bodyToMono(Object[].class);
+                        } else {
+                            return response.createException()
+                                    .flatMap(Mono::error);
+                        }
+                    }).cast(Object[].class);
+
+            return retrievedResource;
+
+        } catch (Throwable e) {
+            return Mono.error(e);
+        }
+    }
+
 }

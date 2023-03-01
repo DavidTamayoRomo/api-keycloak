@@ -98,4 +98,13 @@ public class ResourceServerProxy {
     }
   }
 
+  public Mono<Object[]> consultarUsuarioPorCorreo(String email) {
+    try {
+      return service.consultarUsuarioPorCorreo(email);
+
+    } catch (Throwable e) {
+      return Mono.error(e);
+    }
+  }
+
 }

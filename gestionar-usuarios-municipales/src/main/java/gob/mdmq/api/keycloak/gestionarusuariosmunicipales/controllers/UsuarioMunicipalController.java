@@ -89,4 +89,11 @@ public class UsuarioMunicipalController {
     return proxy.habilitarDeshabilitarUsuario(usuario.getUser_id(),
         usuario.isEnabled() ? true : false);
   }
+
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  @GetMapping(path = "/get-user/email", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<Object[]> consultarUsuarioPorCorreo(@RequestParam String email) {
+    return proxy.consultarUsuarioPorCorreo(email);
+  }
 }
