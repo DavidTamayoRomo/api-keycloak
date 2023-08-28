@@ -2,6 +2,7 @@ package gob.mdmq.api.keycloak.gestionarusuariosmunicipales.controllers;
 
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.Role;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CiudadanoDto;
+import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CredencialDto;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.UsuarioDto;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.proxy.ResourceServerProxy;
 import reactor.core.publisher.Mono;
@@ -96,4 +97,12 @@ public class UsuarioMunicipalController {
   public Mono<Object[]> consultarUsuarioPorCorreo(@RequestParam String email) {
     return proxy.consultarUsuarioPorCorreo(email);
   }
+
+  @ResponseBody
+  @PostMapping(path = "/reset-password", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<ResponseEntity<?>> usuarioResetPassword(@RequestBody CredencialDto credenciales,
+      @RequestParam String correo) {
+    return proxy.resetPassword(credenciales, correo);
+  }
+  
 }
