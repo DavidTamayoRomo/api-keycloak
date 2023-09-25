@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient.RequestBodySpe
 
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.Role;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CiudadanoDto;
+import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CredencialDto;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.security.ProjectProperties;
 import reactor.core.publisher.Mono;
 
@@ -336,6 +337,109 @@ public class UsuarioService {
                                     .clientRegistrationId("municipalesRealm"))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(body)
+                    .exchangeToMono(response -> {
+                        if (response.statusCode()
+                                .equals(HttpStatus.NO_CONTENT)) {
+                            return Mono.just(new ResponseEntity<Mono<?>>(HttpStatus.OK));
+                        } else {
+                            return Mono.just(new ResponseEntity<Mono<?>>(response.statusCode()));
+                        }
+                    });
+
+            return retrievedResource;
+
+        } catch (Throwable e) {
+            return Mono.error(e);
+        }
+    }
+
+    public Mono<Object[]> consultarUsuarioPorCorreo(String email) {
+        try {
+            String url = prop.getResourceServerURLUsers() + "/users?email=" + email;
+
+            Mono<Object[]> retrievedResource = webClient.get()
+                    .uri(url)
+                    .attributes(
+                            ServerOAuth2AuthorizedClientExchangeFilterFunction
+                                    .clientRegistrationId("municipalesRealm"))
+                    .exchangeToMono(response -> {
+                        if (response.statusCode()
+                                .equals(HttpStatus.OK)) {
+                            return response.bodyToMono(Object[].class);
+                        } else {
+                            return response.createException()
+                                    .flatMap(Mono::error);
+                        }
+                    }).cast(Object[].class);
+
+            return retrievedResource;
+
+        } catch (Throwable e) {
+            return Mono.error(e);
+        }
+    }
+
+    public Mono<Object[]> consultarUsuarioPorUserName(String username) {
+
+        try {
+            String url = prop.getResourceServerURLUsers() + "/users?username=" + username;
+
+            Mono<Object[]> retrievedResource = webClient.get()
+                    .uri(url)
+                    .attributes(
+                            ServerOAuth2AuthorizedClientExchangeFilterFunction
+                                    .clientRegistrationId("municipalesRealm"))
+                    .exchangeToMono(response -> {
+                        if (response.statusCode()
+                                .equals(HttpStatus.OK)) {
+                            return response.bodyToMono(Object[].class);
+                        } else {
+                            return response.createException()
+                                    .flatMap(Mono::error);
+                        }
+                    });
+            return retrievedResource;
+
+        } catch (Throwable e) {
+            return Mono.error(e);
+        }
+    }
+
+    public Mono<ResponseEntity<?>> userResetPassword(CredencialDto credenciales, String correo) {
+
+        try {
+
+            Object[] objects = consultarUsuarioPorCorreo(correo).block();
+
+            if (objects.length > 0) {
+                // Map<String, String> map = (Map<String, String>) objects[0];
+                Map<String, String> map = new HashMap<String, String>();
+                map = (Map<String, String>) objects[0];
+
+                String id = map.get("id");
+                System.out.println(id);
+
+                Mono<ResponseEntity<?>> mono = resetPassword(credenciales, id);
+                return mono;
+            } else {
+                return Mono.empty();
+            }
+        } catch (Throwable e) {
+            return Mono.error(e);
+        }
+    }    
+
+    public Mono<ResponseEntity<?>> resetPassword(CredencialDto credenciales, String idUsuario) {
+        try {
+            String url = prop.getResourceServerURLUsers() + "/users/" + idUsuario + "/reset-password";
+
+            Mono<ResponseEntity<?>> retrievedResource = webClient.put()
+                    .uri(url)
+                    .attributes(
+                            ServerOAuth2AuthorizedClientExchangeFilterFunction
+                                    .clientRegistrationId("municipalesRealm"))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(credenciales)
                     .exchangeToMono(response -> {
                         if (response.statusCode()
                                 .equals(HttpStatus.NO_CONTENT)) {

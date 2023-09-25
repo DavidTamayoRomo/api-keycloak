@@ -2,6 +2,7 @@ package gob.mdmq.api.keycloak.gestionarusuariosmunicipales.proxy;
 
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.Role;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CiudadanoDto;
+import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.models.dto.CredencialDto;
 import gob.mdmq.api.keycloak.gestionarusuariosmunicipales.services.UsuarioService;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -98,4 +99,22 @@ public class ResourceServerProxy {
     }
   }
 
+  public Mono<Object[]> consultarUsuarioPorCorreo(String email) {
+    try {
+      return service.consultarUsuarioPorCorreo(email);
+
+    } catch (Throwable e) {
+      return Mono.error(e);
+    }
+  }
+
+  public Mono<ResponseEntity<?>> resetPassword(CredencialDto credenciales, String correo) {
+    try {
+      return service.userResetPassword(credenciales, correo);
+
+    } catch (Throwable e) {
+      return Mono.error(e);
+    }
+  }
+    
 }

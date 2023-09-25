@@ -7,10 +7,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CredencialDto {
 
-    private String type = "password";
+    private String type;
     private String value;
-    private boolean temporary = false;
+    private boolean temporary;
 
-    public CredencialDto() {
+    public CredencialDto(String type, String value, boolean temporary) {
+        this.type = type;
+        this.value = value;
+        this.temporary = temporary;
+
     }
 }
